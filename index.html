@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Technicien Réseaux & Télécoms</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@100;200;300;400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b10;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --orange: #ff6b00;
+    --orange2: #ff8c00;
+    --cyan: #00d4ff;
+    --cyan2: #00fff5;
+    --green: #39ff14;
+    --text: #c8d6e5;
+    --text-dim: #5a6a7a;
+    --border: rgba(0, 212, 255, 0.15);
+    --border-orange: rgba(255, 107, 0, 0.3);
+    --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.4);
+    --glow-orange: 0 0 20px rgba(255, 107, 0, 0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed; width: 12px; height: 12px;
+    background: var(--cyan); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+  }
+
+  /* ─── CANVAS BACKGROUND ─── */
+  #bg-canvas {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; opacity: 0.4;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(8, 11, 16, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--cyan); font-size: 1.1rem;
+    letter-spacing: 0.15em;
+  }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--text-dim); text-decoration: none;
+    font-family: 'Rajdhani', sans-serif; font-size: 0.85rem;
+    font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+    background: var(--cyan); transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ─── SECTIONS ─── */
+  section { position: relative; z-index: 1; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 6rem 0 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+  }
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--cyan); font-size: 0.8rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: ''; display: block; width: 2rem; height: 1px;
+    background: var(--cyan);
+  }
+  h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 800; font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.05; text-transform: uppercase; letter-spacing: -0.01em;
+    color: #fff;
+  }
+  h1 .accent { color: var(--orange); display: block; }
+  h1 .sub { font-weight: 200; font-size: 0.6em; color: var(--text); display: block; margin-top: 0.3rem; }
+  .hero-desc {
+    color: var(--text-dim); font-size: 1rem; line-height: 1.7;
+    margin: 1.5rem 0 2rem;
+    max-width: 480px;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.7rem 1.6rem;
+    font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.25s;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  }
+  .btn-primary {
+    background: var(--orange); color: #fff;
+  }
+  .btn-primary:hover { background: var(--orange2); box-shadow: var(--glow-orange); transform: translateY(-2px); }
+  .btn-secondary {
+    background: transparent; color: var(--cyan);
+    border: 1px solid var(--cyan);
+  }
+  .btn-secondary:hover { background: rgba(0, 212, 255, 0.08); box-shadow: var(--glow-cyan); transform: translateY(-2px); }
+
+  /* Hero visual side */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
+  }
+  .hero-card {
+    position: relative; width: 340px; height: 400px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+  }
+  .hero-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,212,255,0.04) 0%, transparent 50%, rgba(255,107,0,0.04) 100%);
+  }
+  .card-inner {
+    padding: 2.5rem;
+    display: flex; flex-direction: column; height: 100%;
+    justify-content: space-between;
+  }
+  .card-id {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--cyan); font-size: 0.7rem; letter-spacing: 0.15em;
+  }
+  .card-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    border: 2px solid var(--orange);
+    background: linear-gradient(135deg, var(--bg2), var(--bg3));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    box-shadow: var(--glow-orange);
+    margin: 0 auto;
+  }
+  .card-name {
+    font-family: 'Exo 2', sans-serif; font-weight: 700;
+    font-size: 1.3rem; text-align: center; color: #fff;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .card-role {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--orange); font-size: 0.7rem; text-align: center;
+    letter-spacing: 0.1em;
+  }
+  .card-stats {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .stat {
+    text-align: center; border: 1px solid var(--border);
+    padding: 0.5rem 0.25rem;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+  }
+  .stat-num { font-family: 'Share Tech Mono', monospace; color: var(--cyan); font-size: 1rem; }
+  .stat-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* ─── SECTION TITLES ─── */
+  .section-header {
+    margin-bottom: 3.5rem;
+    padding-top: 6rem;
+  }
+  .section-tag {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--orange); font-size: 0.7rem;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-tag::before {
+    content: '//'; color: var(--text-dim);
+  }
+  h2 {
+    font-family: 'Exo 2', sans-serif; font-weight: 800;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    text-transform: uppercase; color: #fff; letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  h2 span { color: var(--cyan); }
+  .section-line {
+    margin-top: 1rem; height: 1px; width: 80px;
+    background: linear-gradient(to right, var(--orange), transparent);
+  }
+
+  /* ─── SKILLS ─── */
+  #competences { padding-bottom: 6rem; }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .skill-cat {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    padding: 1.5rem;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .skill-cat::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(to right, var(--cyan), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .skill-cat:hover { border-color: var(--cyan); transform: translateY(-4px); }
+  .skill-cat:hover::before { opacity: 1; }
+  .cat-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .cat-icon { font-size: 1.4rem; }
+  .cat-title {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 0.8rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--cyan);
+  }
+  .skill-item {
+    display: flex; align-items: flex-start; gap: 0.5rem;
+    margin-bottom: 0.8rem; font-size: 0.85rem; color: var(--text);
+    line-height: 1.5;
+  }
+  .skill-item::before {
+    content: '▸'; color: var(--orange); flex-shrink: 0; margin-top: 0.05rem;
+  }
+
+  /* ─── TIMELINE (Education & Experiences) ─── */
+  #education, #experiences { padding-bottom: 6rem; }
+
+  .timeline {
+    position: relative;
+    padding-left: 3rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--cyan), var(--orange), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 3rem;
+    opacity: 0; transform: translateX(-20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .tl-item.visible { opacity: 1; transform: translateX(0); }
+
+  /* dot on the line */
+  .tl-dot {
+    position: absolute;
+    left: -3.45rem;
+    top: 1.2rem;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 10px rgba(0,212,255,0.5);
+    z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.55rem;
+  }
+  .tl-item.exp-item .tl-dot {
+    border-color: var(--orange);
+    box-shadow: 0 0 10px rgba(255,107,0,0.5);
+  }
+
+  /* connector line from dot to card */
+  .tl-connector {
+    position: absolute;
+    left: -2.45rem; top: 1.55rem;
+    width: 2rem; height: 1px;
+    background: linear-gradient(to right, var(--cyan), transparent);
+  }
+  .tl-item.exp-item .tl-connector {
+    background: linear-gradient(to right, var(--orange), transparent);
+  }
+
+  .tl-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 1.5rem 1.75rem;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+  }
+  .tl-card:hover { border-color: rgba(0,212,255,0.4); transform: translateX(6px); }
+  .tl-item.exp-item .tl-card:hover { border-color: rgba(255,107,0,0.4); }
+
+  .tl-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--cyan);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .tl-item.exp-item .tl-card::before { background: var(--orange); }
+  .tl-card:hover::before { opacity: 1; }
+
+  .tl-period {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--cyan); font-size: 0.7rem;
+    letter-spacing: 0.1em; margin-bottom: 0.4rem;
+  }
+  .tl-item.exp-item .tl-period { color: var(--orange); }
+
+  .tl-title {
+    font-family: 'Exo 2', sans-serif; font-weight: 700;
+    font-size: 1.05rem; color: #fff; margin-bottom: 0.2rem;
+  }
+  .tl-subtitle {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 0.75rem;
+  }
+  .tl-item.exp-item .tl-subtitle { color: var(--cyan); }
+
+  .tl-desc { font-size: 0.84rem; color: var(--text-dim); line-height: 1.65; }
+
+  .tl-tasks { list-style: none; margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .tl-tasks li {
+    font-size: 0.82rem; color: var(--text); line-height: 1.5;
+    padding-left: 1rem; position: relative;
+  }
+  .tl-tasks li::before { content: '▸'; position: absolute; left: 0; color: var(--orange); }
+  .tl-item.exp-item .tl-tasks li::before { color: var(--cyan); }
+
+  /* year badge on left */
+  .tl-year {
+    position: absolute; left: -6.5rem; top: 1rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: var(--text-dim);
+    text-align: right; width: 3.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── GRILLE D'ÉVALUATION ─── */
+  #evaluation { padding-bottom: 6rem; }
+
+  .eval-meta {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+  }
+  .eval-meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .eval-meta-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .eval-meta-val {
+    font-family: 'Exo 2', sans-serif; font-weight: 600;
+    font-size: 0.88rem; color: var(--cyan);
+  }
+
+  .eval-competence-block { margin-bottom: 1rem; }
+
+  .eval-comp-header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,212,255,0.02));
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+  .eval-comp-header:hover { background: rgba(0,212,255,0.08); }
+
+  .eval-comp-header.rt2 { border-left-color: var(--orange); background: linear-gradient(135deg, rgba(255,107,0,0.06), rgba(255,107,0,0.02)); }
+  .eval-comp-header.rt2:hover { background: rgba(255,107,0,0.08); }
+  .eval-comp-header.rt3 { border-left-color: #a855f7; background: linear-gradient(135deg, rgba(168,85,247,0.06), rgba(168,85,247,0.02)); }
+  .eval-comp-header.rt3:hover { background: rgba(168,85,247,0.08); }
+  .eval-comp-header.rom1 { border-left-color: #22c55e; background: linear-gradient(135deg, rgba(34,197,94,0.06), rgba(34,197,94,0.02)); }
+  .eval-comp-header.rom2 { border-left-color: #f59e0b; background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(245,158,11,0.02)); }
+
+  .eval-comp-id {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem; color: var(--cyan);
+    white-space: nowrap;
+    background: rgba(0,212,255,0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+  }
+  .eval-comp-header.rt2 .eval-comp-id { color: var(--orange); background: rgba(255,107,0,0.1); }
+  .eval-comp-header.rt3 .eval-comp-id { color: #a855f7; background: rgba(168,85,247,0.1); }
+  .eval-comp-header.rom1 .eval-comp-id { color: #22c55e; background: rgba(34,197,94,0.1); }
+  .eval-comp-header.rom2 .eval-comp-id { color: #f59e0b; background: rgba(245,158,11,0.1); }
+
+  .eval-comp-name {
+    font-family: 'Exo 2', sans-serif; font-weight: 700;
+    font-size: 0.9rem; color: #fff; flex: 1;
+  }
+  .eval-comp-count {
+    font-size: 0.7rem; color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .eval-comp-arrow {
+    font-size: 0.8rem; color: var(--text-dim);
+    transition: transform 0.3s;
+    margin-left: auto;
+  }
+  .eval-competence-block.open .eval-comp-arrow { transform: rotate(180deg); }
+
+  .eval-ac-list {
+    display: none;
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    border-left: 1px solid var(--border);
+    margin-left: 1.5rem;
+  }
+  .eval-competence-block.open .eval-ac-list { display: block; }
+
+  .eval-ac-item {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  }
+
+  .eval-ac-header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .eval-ac-header:hover { background: rgba(255,255,255,0.03); }
+
+  .eval-ac-code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem; color: var(--orange);
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .eval-ac-label {
+    flex: 1; font-size: 0.82rem; color: var(--text); line-height: 1.4;
+  }
+  .eval-level {
+    display: flex; gap: 3px; flex-shrink: 0;
+  }
+  .eval-level-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1px solid var(--text-dim); background: transparent;
+    transition: background 0.2s;
+  }
+  .eval-level-dot.filled { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 6px rgba(0,212,255,0.5); }
+  .eval-level-dot.filled.orange { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 6px rgba(255,107,0,0.5); }
+  .eval-level-dot.filled.full { background: var(--green); border-color: var(--green); box-shadow: 0 0 6px rgba(57,255,20,0.5); }
+
+  .eval-ac-toggle {
+    font-size: 0.7rem; color: var(--text-dim);
+    transition: transform 0.3s;
+  }
+  .eval-ac-item.open .eval-ac-toggle { transform: rotate(180deg); }
+
+  .eval-ac-body {
+    display: none;
+    padding: 1rem 1.25rem 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    background: rgba(0,0,0,0.2);
+  }
+  .eval-ac-item.open .eval-ac-body { display: block; }
+
+  .eval-reflexif {
+    font-size: 0.82rem; color: var(--text); line-height: 1.75;
+    border-left: 2px solid rgba(0,212,255,0.2);
+    padding-left: 1rem;
+    font-style: italic;
+  }
+  .eval-reflexif-label {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 0.5rem;
+    font-style: normal;
+  }
+
+  .eval-level-legend {
+    display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: var(--text-dim);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+
+  /* ─── PROJECTS ─── */
+  #projets { padding-bottom: 6rem; }
+  .projects-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .project-card {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: pointer; text-decoration: none; display: block; color: inherit;
+    position: relative; overflow: hidden;
+  }
+  .project-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+    background: linear-gradient(to right, var(--orange), var(--cyan));
+    transition: width 0.4s;
+  }
+  .project-card:hover { border-color: rgba(255,107,0,0.5); transform: translateY(-5px); }
+  .project-card:hover::after { width: 100%; }
+  .project-icon {
+    width: 64px; height: 64px; margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .project-name {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 0.9rem; color: #fff; margin-bottom: 0.5rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .project-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+  .project-link {
+    display: inline-block; margin-top: 1rem; padding: 0.35rem 0.85rem;
+    border: 1px solid var(--cyan); color: var(--cyan);
+    font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.08em; text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+    transition: background 0.2s, color 0.2s;
+  }
+  .project-link:hover { background: var(--cyan); color: var(--bg); }
+
+  /* ─── CERTIFICATIONS ─── */
+  #certifications { padding-bottom: 6rem; }
+  .certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .cert-card {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    padding: 2rem;
+    text-align: center;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .cert-card:hover { transform: translateY(-5px); border-color: var(--orange); }
+  .cert-icon {
+    font-size: 2.5rem; margin-bottom: 1rem;
+    filter: drop-shadow(0 0 12px var(--cyan));
+  }
+  .cert-name {
+    font-family: 'Exo 2', sans-serif; font-weight: 700;
+    font-size: 1rem; color: #fff; margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+  .cert-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 1.25rem; }
+  .cert-tags { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+  .cert-tag {
+    padding: 0.2rem 0.6rem; font-size: 0.65rem;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.08em;
+    border: 1px solid var(--orange); color: var(--orange);
+    clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-dim); font-size: 0.72rem;
+    position: relative; z-index: 1;
+    background: var(--bg2);
+  }
+  footer span { color: var(--cyan); }
+
+  /* ─── FADE IN ANIMATION ─── */
+  .fade-in {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── GLITCH TEXT ─── */
+  .glitch { position: relative; }
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  }
+  .glitch::before {
+    color: var(--cyan); animation: glitch1 4s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  }
+  .glitch::after {
+    color: var(--orange); animation: glitch2 4s infinite;
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  }
+  @keyframes glitch1 {
+    0%, 90%, 100% { transform: none; opacity: 0; }
+    92% { transform: translate(-2px, 0); opacity: 0.8; }
+    94% { transform: translate(2px, 0); opacity: 0.8; }
+    96% { transform: none; opacity: 0; }
+  }
+  @keyframes glitch2 {
+    0%, 88%, 100% { transform: none; opacity: 0; }
+    90% { transform: translate(2px, 0); opacity: 0.6; }
+    92% { transform: translate(-2px, 0); opacity: 0.6; }
+    94% { transform: none; opacity: 0; }
+  }
+
+  /* ─── SCAN LINE ─── */
+  body::after {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--cyan), transparent);
+    animation: scan 8s linear infinite;
+    pointer-events: none; z-index: 9990; opacity: 0.3;
+  }
+  @keyframes scan {
+    0% { top: 0; }
+    100% { top: 100vh; }
+  }
+
+  /* ─── INTRO BLOCKS ─── */
+  .intro-blocks {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .intro-block {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .intro-block:hover { border-color: rgba(0,212,255,0.3); }
+  .intro-block-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.9rem 1.25rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.05), transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  .intro-block-icon { font-size: 1.1rem; }
+  .intro-block-title {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--cyan); flex: 1;
+  }
+  .intro-block-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem; color: var(--orange);
+    background: rgba(255,107,0,0.08);
+    padding: 0.15rem 0.5rem;
+    border: 1px solid rgba(255,107,0,0.2);
+    border-radius: 2px;
+  }
+  .intro-block-body {
+    padding: 1.1rem 1.25rem;
+    font-size: 0.83rem; color: var(--text-dim); line-height: 1.7;
+  }
+  .intro-block-body strong { color: var(--text); font-weight: 600; }
+  .intro-missions { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .intro-missions li {
+    padding-left: 1rem; position: relative;
+    font-size: 0.82rem; color: var(--text); line-height: 1.5;
+  }
+  .intro-missions li::before { content: '▸'; position: absolute; left: 0; color: var(--orange); }
+
+  /* ─── NEW NOTATION : PROGRESS BAR ─── */
+  .eval-level-bar {
+    display: flex; flex-direction: column; gap: 2px;
+    min-width: 90px; flex-shrink: 0;
+  }
+  .eval-level-bar-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem; color: var(--text-dim);
+    text-align: right; letter-spacing: 0.05em;
+  }
+  .eval-level-bar-track {
+    height: 6px; background: rgba(255,255,255,0.06);
+    border-radius: 3px; overflow: hidden;
+    position: relative;
+  }
+  .eval-level-bar-fill {
+    height: 100%; border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+  }
+  .eval-level-bar-fill::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 6px; height: 100%; background: rgba(255,255,255,0.4);
+    border-radius: 0 3px 3px 0;
+  }
+  /* level colours */
+  .lvl-0 .eval-level-bar-fill { width: 0%; background: transparent; }
+  .lvl-025 .eval-level-bar-fill { width: 25%; background: linear-gradient(to right, #c0392b, #e74c3c); }
+  .lvl-05  .eval-level-bar-fill { width: 50%; background: linear-gradient(to right, var(--orange), var(--orange2)); }
+  .lvl-075 .eval-level-bar-fill { width: 75%; background: linear-gradient(to right, var(--cyan), #00b8d9); }
+  .lvl-1   .eval-level-bar-fill { width: 100%; background: linear-gradient(to right, var(--green), #00c853); }
+  .lvl-025 .eval-level-bar-label,
+  .lvl-05  .eval-level-bar-label { color: var(--orange); }
+  .lvl-075 .eval-level-bar-label { color: var(--cyan); }
+  .lvl-1   .eval-level-bar-label { color: var(--green); }
+
+  @media (max-width: 900px) {
+    .intro-blocks { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SYS<span>.</span>ADMIN</div>
+  <ul class="nav-links">
+    <li><a href="#competences">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#experiences">Expériences</a></li>
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#evaluation">Évaluation</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-tag fade-in">En stage · Bassetti · Depuis Janvier 2026</div>
+        <h1 class="fade-in">
+          <span class="glitch" data-text="MOUSTAPHA">MOUSTAPHA</span>
+          <span class="accent">MBAYE</span>
+          <span class="sub">BUT Réseaux Télécoms · Parcours ROM · IUT Roanne</span>
+        </h1>
+        <p class="hero-desc fade-in">
+          Je m'appelle <strong style="color:#fff">Moustapha MBAYE</strong>, étudiant en 3ème année de BUT Réseaux & Télécommunications à l'IUT de Roanne, spécialisé dans le parcours Réseaux Opérateurs Multimédias (ROM). Passionné par les infrastructures réseau, la cybersécurité et les technologies de communication, mon objectif est de devenir ingénieur ou technicien spécialisé dans la conception, la configuration et la supervision d'architectures techniques.
+        </p>
+        <p class="hero-desc fade-in" style="margin-top:0.75rem">
+          Actuellement en stage chez <strong style="color:var(--orange)">Bassetti</strong>, entreprise spécialisée dans la gestion documentaire et les solutions métiers (PLM, ERP, GED) pour les industries, où j'interviens sur le support IT, le déploiement de postes et la gestion du parc via GLPI. Ce portfolio retrace mon parcours académique ainsi que les projets et compétences développés tout au long du semestre 5.
+        </p>
+      </div>
+      <div class="hero-visual fade-in">
+        <div class="hero-card">
+          <div class="card-inner">
+            <div class="card-id">ID // BRT-2026-ROM2</div>
+            <div>
+              <div class="card-avatar">👨‍💻</div>
+              <div style="margin-top:1rem">
+                <div class="card-name">Moustapha MBAYE</div>
+                <div class="card-role">Étudiant BUT RT · Stage Bassetti</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="stat">
+                <div class="stat-num">3</div>
+                <div class="stat-label">Ans BUT</div>
+              </div>
+              <div class="stat">
+                <div class="stat-num">2</div>
+                <div class="stat-label">Stages</div>
+              </div>
+              <div class="stat">
+                <div class="stat-num">3</div>
+                <div class="stat-label">Certs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPÉTENCES -->
+<section id="competences">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Compétences techniques</div>
+      <h2>Ce que je <span>maîtrise</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid" style="grid-template-columns:1fr">
+      <div class="skill-cat fade-in">
+        <div class="cat-header">
+          <span class="cat-icon">🖥️</span>
+          <span class="cat-title">Administration Système</span>
+        </div>
+        <div class="skill-item">Administration de serveurs Windows : gestion des comptes, groupes et permissions dans Active Directory, création de GPOs et automatisation via PowerShell.</div>
+        <div class="skill-item">Diagnostic et résolution d'incidents système ou applicatifs sur environnements Windows.</div>
+        <div class="skill-item">Mise en place et exploitation de solutions de monitoring (Grafana, Zabbix).</div>
+      </div>
+      <div class="skill-cat fade-in">
+        <div class="cat-header">
+          <span class="cat-icon">🌐</span>
+          <span class="cat-title">Administration Réseau</span>
+        </div>
+        <div class="skill-item">Configuration de routeurs, switchs et points d'accès Cisco, Ubiquiti et Mikrotik.</div>
+        <div class="skill-item">Maîtrise des protocoles RIP, OSPF, BGP... et implémentation de technologies MPLS et VRF.</div>
+        <div class="skill-item">Sécurité : ACL avancées, segmentation réseau, gestion de firewalls Stormshield.</div>
+      </div>
+      <div class="skill-cat fade-in">
+        <div class="cat-header">
+          <span class="cat-icon">📡</span>
+          <span class="cat-title">Télécommunication</span>
+        </div>
+        <div class="skill-item">Opérations de raccordement et de soudure fibre optique.</div>
+        <div class="skill-item">Configuration de systèmes de téléphonie IP : Xivo, Alcatel, 3CX, Cisco, OXO.</div>
+        <div class="skill-item">Solides compétences en technologies xDSL et FTTx.</div>
+        <div class="skill-item">Connaissance des réseaux mobiles (2G à 5G).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ÉDUCATION -->
+<section id="education">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Parcours académique</div>
+      <h2>Mon <span>Éducation</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-year">2023 →<br>auj.</div>
+        <div class="tl-dot">🎓</div>
+        <div class="tl-connector"></div>
+        <div class="tl-card">
+          <div class="tl-period">Depuis Septembre 2023 — En cours</div>
+          <div class="tl-title">IUT de Roanne | Université Jean Monnet</div>
+          <div class="tl-subtitle">BUT Réseaux Télécoms</div>
+          <div class="tl-desc">Administration des réseaux et Internet, connexion entre les entreprises et les usagers, développement des outils et applications informatiques. Parcours Réseaux Opérateurs Multimédias (ROM).</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2016 →<br>2023</div>
+        <div class="tl-dot">🪖</div>
+        <div class="tl-connector"></div>
+        <div class="tl-card">
+          <div class="tl-period">Septembre 2016 — Juin 2023</div>
+          <div class="tl-title">Prytanée Militaire de Saint-Louis, Sénégal</div>
+          <div class="tl-subtitle">Baccalauréat</div>
+          <div class="tl-desc">Baccalauréat en Sciences Expérimentales — Maths, Physique-Chimie, SVT.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPÉRIENCES -->
+<section id="experiences">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Expérience professionnelle</div>
+      <h2>Mes <span>Expériences</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item exp-item">
+        <div class="tl-year">2026 →<br>auj.</div>
+        <div class="tl-dot">💼</div>
+        <div class="tl-connector"></div>
+        <div class="tl-card">
+          <div class="tl-period">Depuis Janvier 2026 — En cours</div>
+          <div class="tl-title">Bassetti</div>
+          <div class="tl-subtitle">STAGE — Assistant Technicien Informatique</div>
+          <ul class="tl-tasks">
+            <li>Installation, configuration et déploiement des postes de travail, imprimantes réseau et logiciels métiers.</li>
+            <li>Gestion du parc informatique : inventaire, suivi des licences, préparation et configuration de nouveaux équipements.</li>
+            <li>Gestion et traitement des tickets via GLPI : analyse des demandes, priorisation, résolution et suivi utilisateur.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item exp-item">
+        <div class="tl-year">Juin →<br>Août 25</div>
+        <div class="tl-dot">🖥️</div>
+        <div class="tl-connector"></div>
+        <div class="tl-card">
+          <div class="tl-period">Juin 2025 — Août 2025</div>
+          <div class="tl-title">Dem Dikk</div>
+          <div class="tl-subtitle">STAGE — Assistant IT</div>
+          <ul class="tl-tasks">
+            <li>Support utilisateur N1/N2 : diagnostic avancé des incidents, prise en main à distance, résolution des pannes matérielles et logicielles.</li>
+            <li>Réalisation de maintenance préventive du parc : mises à jour, optimisation des performances.</li>
+            <li>Rédaction des procédures techniques, guides utilisateurs et supports de formation.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJETS -->
+<section id="projets">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Réalisations & Projets Techniques</div>
+      <h2>Big <span>Projects</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid" style="grid-template-columns:repeat(2,1fr)">
+      <div class="project-card fade-in">
+        <div class="project-icon">📶</div>
+        <div class="project-name">Préparation Certification Cisco</div>
+        <div class="project-desc">Une série de 20 exercices intensifs couvrant l'intégralité du programme Cisco CCNA.</div>
+        <span class="project-link">Visiter →</span>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-icon">🗂️</div>
+        <div class="project-name">Administration Active Directory</div>
+        <div class="project-desc">Conception d'une infrastructure multi-domaines simulant deux entités distinctes.</div>
+        <span class="project-link">Visiter →</span>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-icon">🔥</div>
+        <div class="project-name">Préparation Certification Stormshield</div>
+        <div class="project-desc">Configuration et administration de pare-feu Stormshield Network Security pour la préparation à la certification.</div>
+        <span class="project-link">Visiter →</span>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-icon">🎫</div>
+        <div class="project-name">Mise en place d'une Infra GLPI</div>
+        <div class="project-desc">Déploiement d'une solution complète de Helpdesk et de gestion de parc actif.</div>
+        <span class="project-link">Visiter →</span>
+      </div>
+      <div class="project-card fade-in" style="border-color: rgba(57,255,20,0.2);">
+        <div class="project-icon" style="border-color:rgba(57,255,20,0.3);">🌿</div>
+        <div class="project-name">Surveillance Qualité de l'Air IoT LoRaWAN</div>
+        <div class="project-desc">Système IoT de surveillance environnementale en temps réel via capteurs LoRaWAN — mesure CO₂, température, humidité sur réseau LPWAN longue portée.</div>
+        <a href="https://github.com/Papyzohane/Surveillance-Qualit-de-l-Air---IoT-LoRaWAN-" target="_blank" class="project-link" style="border-color:var(--green);color:var(--green)">GitHub →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Certifications obtenues</div>
+      <h2>Mes <span>Certifications</span> 🏆</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="certs-grid" style="grid-template-columns:repeat(2,1fr)">
+      <div class="cert-card fade-in">
+        <div class="cert-icon">🇬🇧</div>
+        <div class="cert-name">TOEIC</div>
+        <div class="cert-desc">Test d'anglais professionnel mesurant la compréhension écrite et orale, parfois aussi l'expression selon la version passée.</div>
+        <div class="cert-tags">
+          <span class="cert-tag">Certification</span>
+          <span class="cert-tag">Award Letter</span>
+        </div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">📞</div>
+        <div class="cert-name">3CX Advanced Certification</div>
+        <div class="cert-desc">Certification avancée de l'Académie 3CX couvrant le routage d'appels avancé, la sécurité anti-fraude, les ponts, le dépannage et l'administration VoIP.</div>
+        <div class="cert-tags">
+          <span class="cert-tag">VoIP</span>
+          <span class="cert-tag">Advanced</span>
+        </div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">🛡️</div>
+        <div class="cert-name">CSNA — Certified Stormshield Network Administrator</div>
+        <div class="cert-desc">Certification Stormshield centrée sur la sécurité réseau et l'administration de pare-feu. Démontre la capacité à configurer, protéger et superviser une infrastructure de cybersécurité.</div>
+        <div class="cert-tags">
+          <span class="cert-tag">Cybersécurité</span>
+          <span class="cert-tag">Firewall</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GRILLE D'ÉVALUATION -->
+<section id="evaluation">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">Portfolio S5 — BUT3</div>
+      <h2>Grille d'<span>Évaluation</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="eval-meta fade-in">
+      <div class="eval-meta-item"><span class="eval-meta-label">Nom</span><span class="eval-meta-val">Moustapha MBAYE</span></div>
+      <div class="eval-meta-item"><span class="eval-meta-label">Semestre</span><span class="eval-meta-val">S5</span></div>
+      <div class="eval-meta-item"><span class="eval-meta-label">Parcours</span><span class="eval-meta-val">Réseaux Opérateurs Multimédias</span></div>
+      <div class="eval-meta-item"><span class="eval-meta-label">Groupe</span><span class="eval-meta-val">ROM 2</span></div>
+    </div>
+
+    <div class="eval-level-legend fade-in">
+      <div class="legend-item"><div style="width:24px;height:6px;border-radius:2px;background:rgba(90,106,122,0.3);border:1px solid #5a6a7a"></div> Non acquis (0)</div>
+      <div class="legend-item"><div style="width:24px;height:6px;border-radius:2px;background:linear-gradient(to right,#c0392b,#e74c3c)"></div> Débutant (0.25)</div>
+      <div class="legend-item"><div style="width:24px;height:6px;border-radius:2px;background:linear-gradient(to right,var(--orange),var(--orange2))"></div> En progression (0.5)</div>
+      <div class="legend-item"><div style="width:24px;height:6px;border-radius:2px;background:linear-gradient(to right,var(--cyan),#00b8d9)"></div> Acquis (0.75)</div>
+      <div class="legend-item"><div style="width:24px;height:6px;border-radius:2px;background:linear-gradient(to right,var(--green),#00c853)"></div> Maîtrisé (1.0)</div>
+    </div>
+
+    <div class="eval-competence-block fade-in">
+      <div class="eval-comp-header" style="border-left-color:#00d4ff" onclick="toggleComp(this)">
+        <span class="eval-comp-id" style="color:#00d4ff;background:color-mix(in srgb,#00d4ff 12%,transparent)">RT1</span>
+        <span class="eval-comp-name">RT1 — Administrer les réseaux et l'Internet</span>
+        <span class="eval-comp-count">6 AC</span>
+        <span class="eval-comp-arrow">▼</span>
+      </div>
+      <div class="eval-ac-list">
+
+        <div class="eval-ac-item" id="ac-AC3101">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC31.01</span>
+            <span class="eval-ac-label">Concevoir un projet de réseau informatique d'une entreprise en intégrant les problématiques de haute disponibilité, de QoS, de sécurité et de supervision</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour valider cet apprentissage, j'ai dû jongler avec plusieurs modules très différents. Je suis vraiment monté en compétence sur la partie supervision et sécurité, où mes notes aux évaluations Firewalling (certification Stormshield) et SNMP confirment que j'ai bien assimilé comment sécuriser et monitorer un parc. Par contre, la QoS a été un point de blocage. Si la configuration de base sur MikroTik s'est bien passée, j'ai eu beaucoup plus de mal sur le module spécifique dédié. Ça m'a montré que c'est une notion bien plus technique qu'il n'y paraît, demandant une précision que je n'avais pas encore totalement. Au final, ce module m'a forcé à sortir de ma zone de confort et m'a fait comprendre que la gestion des flux est très important pour le bon fonctionnement d'une entreprise.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3102">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC31.02</span>
+            <span class="eval-ac-label">Réaliser la documentation technique de ce projet</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Le S5 a été un tournant, car on a enchaîné les projets presque sans interruption. Avec l'habitude que j'avais déjà prise de rédiger des comptes rendus durant mes deux premières années, ce semestre m'a permis de confirmer et de "professionnaliser" mes méthodes de documentation (Méthode SCORE). Que ce soit à travers les CR techniques ou les supports de présentation (slides), j'ai vraiment réalisé qu'un projet, même parfaitement exécuté techniquement, ne sert pratiquement à rien sans une documentation claire. J'ai compris qu'en entreprise, la doc est le seul moyen de transmettre son travail, de permettre à un collègue de reprendre la main ou simplement de garder une trace de l'architecture déployée.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3103">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC31.03</span>
+            <span class="eval-ac-label">Réaliser une maquette de démonstration du projet</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour valider cet apprentissage, j'ai réalisé une maquette fonctionnelle dans le cadre de mon projet tutoré. L'enjeu était de prouver la faisabilité du déploiement d'une solution GLPI pour une entreprise. Plutôt que de travailler sur une infrastructure complète et coûteuse, j'ai mis en place une version réduite et simplifiée, mais totalement opérationnelle, sur un environnement virtualisé. Cette maquette m'a permis de démontrer que les accès VPN, la gestion des tickets et l'inventaire fonctionnaient correctement avant d'envisager un déploiement réel. Ce travail de simulation m'a appris à isoler les fonctionnalités critiques pour les tester et à présenter une preuve de concept concrète, capable de rassurer les décideurs sur la viabilité technique de la solution proposée.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3104">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC31.04</span>
+            <span class="eval-ac-label">Défendre / argumenter un projet</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour défendre un projet, j'ai appris qu'il ne suffit pas que la technique fonctionne, il faut aussi savoir convaincre que c'est la meilleure solution. J'ai vraiment mis cela en pratique lors de la préparation du MTCNA, où je devais justifier mes choix de configuration sur un routeur MikroTik (QoS, Firewall, VPN) face au prof, en prouvant que mon architecture tenait la route. Cette expérience s'est prolongée avec la SAE 5.02, où j'ai dû littéralement "vendre" l'intérêt de passer à une infrastructure automatisée sous Docker et Ansible. Au final, ça m'a appris qu'être un bon technicien, c'est aussi être capable de rassurer et de démontrer la valeur de son travail.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3105">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC31.05</span>
+            <span class="eval-ac-label">Communiquer avec les acteurs du projet</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Cet apprentissage a été marqué par une mise en situation concrète grâce au module de communication, où j'ai été évalué sur la conduite et l'animation de réunion. Cette compétence s'est d'ailleurs étendue grâce à nos cours d'anglais, où nous avons appris à tenir ce même rôle d'animateur dans une langue étrangère. Au final, j'ai réalisé que la posture de communicant est capitale pour garantir que tout le monde avance dans la même direction, sans malentendus, même si ce n'est pas la chose sur laquelle je suis le plus doué d'habitude.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3106">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC31.06</span>
+            <span class="eval-ac-label">Gérer le projet et les différentes étapes de sa mise en œuvre en respectant les délais</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              La gestion de projet a pris une dimension réelle lors de notre mise en situation sur le déploiement d'une infrastructure 3CX. C'est là que j'ai compris que la technique n'est qu'une partie du boulot : pour respecter les délais et ne pas se laisser déborder, j'ai dû apprendre à structurer chaque étape. On a utilisé des outils comme le diagramme de Gantt pour le planning, mais aussi la matrice RACI pour savoir précisément qui fait quoi. Ce module m'a forcé à anticiper les galères grâce à l'analyse risques/opportunités et à définir des objectifs clairs avec la méthode SMART. Au final, cette expérience m'a montré qu'un projet réussi, c'est avant tout un projet bien piloté où l'on sait où l'on va avant même d'avoir configuré le premier équipement.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="eval-competence-block fade-in">
+      <div class="eval-comp-header" style="border-left-color:#ff6b00" onclick="toggleComp(this)">
+        <span class="eval-comp-id" style="color:#ff6b00;background:color-mix(in srgb,#ff6b00 12%,transparent)">RT2</span>
+        <span class="eval-comp-name">RT2 — Connecter les entreprises et les usagers</span>
+        <span class="eval-comp-count">5 AC</span>
+        <span class="eval-comp-arrow">▼</span>
+      </div>
+      <div class="eval-ac-list">
+
+        <div class="eval-ac-item" id="ac-AC3201">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC32.01</span>
+            <span class="eval-ac-label">Déployer un système de communication pour l'entreprise</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour cet acquis d'apprentissage, j'ai accompagné l'administrateur système de BASSETTI dans le déploiement d'un Sharing Tool interne afin de centraliser et sécuriser le partage de documents techniques volumineux. J'ai participé à l'installation de la solution sur une pile LAMP virtualisée. Ce projet n'était pas aussi technique que le reste mais cela m'a beaucoup plu de travailler avec les autres membres de l'équipe.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3202">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC32.02</span>
+            <span class="eval-ac-label">Déployer un réseau d'accès sans fil pour le réseau d'entreprise en intégrant les enjeux de la sécurité</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour valider cet apprentissage sur le sans-fil, je me suis appuyé sur la préparation intensive de la certification CCNA. On a réalisé une série de 24 exercices pratiques, ce qui m'a permis de manipuler concrètement le déploiement de réseaux Wi-Fi en entreprise. L'exercice le plus marquant a été la configuration de points d'accès via un contrôleur (WLC), où j'ai dû mettre en place deux SSID distincts pour séparer les flux. Même si ça n'a pas été sur un équipement physique comme en 2ème année (Ubiquiti), j'ai trouvé cette méthode assez spéciale et intéressante.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3203">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC32.03</span>
+            <span class="eval-ac-label">Déployer un réseau d'accès fixe ou mobile pour un opérateur de télécommunications en intégrant la sécurité</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour cet apprentissage axé sur les réseaux opérateurs, j'ai abordé différents concepts. Dans le module d'ingénierie des systèmes télécoms, j'ai d'abord acquis des bases théoriques sur des technologies de pointe comme le beamforming pour l'optimisation des antennes. Même si cette partie était purement théorique et un peu compliquée, elle m'a permis de comprendre comment les opérateurs gèrent la couverture et la capacité de leurs réseaux mobiles. J'ai pu mettre cela en pratique via des TP sur QGIS, où j'ai découvert la dimension géographique et cartographique du métier. Apprendre à manipuler des données sur QGIS m'a fait réaliser que le déploiement d'un réseau opérateur nécessite une véritable étude de terrain pour optimiser l'emplacement des infrastructures.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3204">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC32.04</span>
+            <span class="eval-ac-label">Permettre aux collaborateurs de se connecter de manière sécurisée au système d'information de l'entreprise</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour valider cet apprentissage, j'ai mis en place une solution de connexion nomade sécurisée dans le cadre d'un projet tutoré. L'objectif était de permettre aux collaborateurs d'accéder à distance à une infrastructure GLPI sans compromettre l'intégrité du système d'information. Pour cela, j'ai déployé un tunnel VPN combinant OpenVPN et le protocole IPSec sur du matériel MikroTik. Travailler sur l'interface MikroTik m'a forcé à être rigoureux sur la gestion des politiques de filtrage et des certificats, ce qui est nouveau pour moi et ce qui m'a d'ailleurs réussi pour le coup.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3205">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC32.05</span>
+            <span class="eval-ac-label">Collaborer en mode projet en français et en anglais</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              La collaboration en mode projet a pris une dimension très concrète ce semestre, non seulement en français mais aussi via le module de Technical English. L'exercice a été de guider un camarade, exclusivement en anglais, pour réaliser une configuration réseau complexe dans un délai très serré de 10 minutes. Cette mise en situation m'a forcé à être extrêmement précis dans mon vocabulaire technique et à structurer mes consignes de manière logique pour éviter toute erreur de manipulation. J'ai réalisé que collaborer, ce n'est pas juste faire sa part du travail, c'est savoir transmettre une procédure technique clairement, même sous pression et dans une langue étrangère.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="eval-competence-block fade-in">
+      <div class="eval-comp-header" style="border-left-color:#a855f7" onclick="toggleComp(this)">
+        <span class="eval-comp-id" style="color:#a855f7;background:color-mix(in srgb,#a855f7 12%,transparent)">RT3</span>
+        <span class="eval-comp-name">RT3 — Créer des outils et des applications informatiques pour les R&T</span>
+        <span class="eval-comp-count">6 AC</span>
+        <span class="eval-comp-arrow">▼</span>
+      </div>
+      <div class="eval-ac-list">
+
+        <div class="eval-ac-item" id="ac-AC3301">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC33.01</span>
+            <span class="eval-ac-label">Élaborer les spécifications techniques et le cahier des charges d'une application informatique</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour cet apprentissage, j'ai accompagné l'administrateur système de mon entreprise dans la définition des besoins pour l'évolution de notre solution logicielle interne, TEEXMA. En travaillant sur l'élaboration des spécifications techniques et du cahier des charges, j'ai dû traduire des exigences fonctionnelles des utilisateurs (vu que je suis au support) en contraintes techniques, notamment l'optimisation des requêtes sur la base de données, les prérequis et les schémas d'architecture nécessaires. Cette mission m'a permis de comprendre que la rédaction rigoureuse du cahier des charges est l'étape la plus critique du cycle de vie d'un projet : elle permet d'anticiper les soucis techniques, de structurer le développement et d'assurer que l'application finale répondra aux contraintes de performance et de sécurité.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3302">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC33.02</span>
+            <span class="eval-ac-label">Mettre en place un environnement de travail collaboratif informatique</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour cet apprentissage, je me suis appuyé sur le module dédié au cycle de vie d'un projet informatique. C'est là que j'ai réellement appris à utiliser Git pour gérer des projets de manière professionnelle. J'ai compris comment Git permet de structurer le travail en équipe : la gestion des branches pour développer des fonctionnalités en parallèle, la résolution de conflits et le versionnage pour ne jamais perdre l'historique des modifications. Cette expérience m'a montré qu'un environnement collaboratif efficace repose surtout sur la traçabilité. Même en entreprise, savoir utiliser Git est devenu indispensable pour garantir que chaque membre de l'équipe puisse contribuer au projet sans écraser le travail des autres, tout en assurant une maintenance fluide des configurations.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3303">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC33.03</span>
+            <span class="eval-ac-label">Participer à la formation des utilisateurs</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              C'est vrai qu'à l'école, on reste souvent entre nous à parler "technique", mais c'est sur le terrain, en entreprise, que j'ai réalisé l'importance de cette compétence. Pour moi, c'est devenu un réflexe quotidien : dès que je dépanne un collègue ou que j'installe un nouvel outil, je prends le temps d'expliquer le "pourquoi" et le "comment". J'ai vite compris qu'un utilisateur qui comprend ce qu'il fait est un utilisateur qui fait moins d'erreurs et qui se sent plus en confiance. Ce rôle de pédagogue me demande souvent de traduire mon jargon de technicien en mots simples, et c'est finalement une partie du métier que j'apprécie beaucoup, car c'est là qu'on voit l'impact direct de notre travail sur les autres.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3304">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC33.04</span>
+            <span class="eval-ac-label">Déployer et maintenir une solution informatique</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              La validation de cet apprentissage s'est concrétisée lors de la SAE5.02, où j'ai utilisé Docker et Ansible pour déployer et maintenir une infrastructure. Ce qui m'a vraiment marqué avec Ansible, c'est sa méthode de déploiement "agentless" (sans agent) via SSH : on n'a rien besoin d'installer sur les machines cibles pour les configurer. Cette approche, couplée à l'utilisation de playbooks, permet un déploiement reproductible et ultra-rapide. Concernant la maintenance, avec Docker et Ansible, tout change : si un service tombe ou doit être mis à jour, il suffit de relancer un playbook pour que l'infrastructure revienne exactement dans l'état souhaité (principe d'idempotence). J'ai compris que l'automatisation n'est pas juste un gain de temps, c'est surtout la garantie d'une maintenance fiable, loin des erreurs manuelles que l'on peut faire sur chaque machine individuellement.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3305">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC33.05</span>
+            <span class="eval-ac-label">S'informer sur les évolutions et les nouveautés technologiques</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Dans le cadre de cet apprentissage, j'ai commencé la préparation d'un projet de veille technologique qui sera finalisé en fin d'année. Ce travail m'a obligé à mettre en place une véritable méthodologie pour filtrer et analyser les nouveautés constantes du secteur des réseaux et télécoms. J'ai compris que rester à jour n'est pas juste une option, mais une nécessité pour ne pas proposer des solutions obsolètes. Ce projet de veille me permet d'explorer des sujets qui dépassent le cadre strict de nos cours actuels et de développer un regard sur les tendances émergentes.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3306">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC33.06</span>
+            <span class="eval-ac-label">Sécuriser l'environnement numérique d'une application</span>
+            <div class="eval-level-bar lvl-1">
+              <div class="eval-level-bar-label">Maîtrisé</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour valider cet apprentissage, j'ai travaillé sur la préparation de la certification CSNA de Stormshield, qui m'a permis de maîtriser la protection périmétrique des applications. À travers différents labs de firewalling, j'ai appris à mettre en place une véritable "protection applicative" en ne me contentant pas de simples règles de filtrage IP. En manipulant les objets et les règles de translation (NAT) sur les firewalls SNS, j'ai compris comment isoler une application dans une zone sécurisée (DMZ) et limiter son exposition au strict nécessaire.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="eval-competence-block fade-in">
+      <div class="eval-comp-header" style="border-left-color:#22c55e" onclick="toggleComp(this)">
+        <span class="eval-comp-id" style="color:#22c55e;background:color-mix(in srgb,#22c55e 12%,transparent)">ROM1</span>
+        <span class="eval-comp-name">ROM1 — Gérer les infrastructures et les services des réseaux opérateurs</span>
+        <span class="eval-comp-count">2 AC</span>
+        <span class="eval-comp-arrow">▼</span>
+      </div>
+      <div class="eval-ac-list">
+
+        <div class="eval-ac-item" id="ac-AC3401">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC34.01</span>
+            <span class="eval-ac-label">Administrer / superviser les infrastructures et les services télécom</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Dans le cadre du module R5.03 (Ingénierie des systèmes télécoms), j'ai abordé l'administration des infrastructures sous un angle cartographique et stratégique en utilisant QGIS. Cet outil m'a permis de découvrir comment un opérateur supervise et planifie son réseau sur le terrain. J'ai appris à manipuler des données géographiques pour visualiser la couverture des antennes, identifier les zones d'ombre, effectuer des calculs attributaires et optimiser l'emplacement des infrastructures pour garantir un service continu. C'est un aspect de la supervision beaucoup plus visuel et concret que la gestion de réseau classique comme le SNMP.
+            </div>
+          </div>
+        </div>
+        <div class="eval-ac-item" id="ac-AC3402">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC34.02</span>
+            <span class="eval-ac-label">Administrer et déployer des fonctions réseaux virtualisées et programmer le réseau</span>
+            <div class="eval-level-bar lvl-075">
+              <div class="eval-level-bar-label">Acquis</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Pour cet apprentissage réalisé durant mon stage, j'ai accompagné un administrateur réseau dans la migration d'une infrastructure traditionnelle vers un modèle SDN (Software Defined Networking) afin d'automatiser le provisionnement de nos ressources. En participant au déploiement de fonctions réseaux virtualisées, notamment des instances pfSense et des concentrateurs VPN IPsec tournant sur un hyperviseur ESXi, j'ai compris comment la virtualisation permet de décorréler les services du matériel pour gagner en résilience. J'ai activement contribué à la programmation du réseau en utilisant des playbooks Ansible pour injecter des configurations de masse sur des commutateurs via le protocole SSH/Netconf, ce qui nous a permis d'uniformiser nos listes de contrôle d'accès (ACL) et nos trunks 802.1Q en une seule commande. Cette expérience m'a démontré que l'Infrastructure as Code (IaC) est devenue le standard pour gérer des réseaux complexes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="eval-competence-block fade-in">
+      <div class="eval-comp-header" style="border-left-color:#f59e0b" onclick="toggleComp(this)">
+        <span class="eval-comp-id" style="color:#f59e0b;background:color-mix(in srgb,#f59e0b 12%,transparent)">ROM2</span>
+        <span class="eval-comp-name">ROM2 — Gérer les communications unifiées et la vidéo sur Internet</span>
+        <span class="eval-comp-count">1 AC</span>
+        <span class="eval-comp-arrow">▼</span>
+      </div>
+      <div class="eval-ac-list">
+
+        <div class="eval-ac-item" id="ac-AC3501">
+          <div class="eval-ac-header" onclick="toggleAC(this)">
+            <span class="eval-ac-code">AC35.01</span>
+            <span class="eval-ac-label">Administrer les services multimédias pour une entreprise</span>
+            <div class="eval-level-bar lvl-05">
+              <div class="eval-level-bar-label">En progression</div>
+              <div class="eval-level-bar-track"><div class="eval-level-bar-fill"></div></div>
+            </div>
+            <span class="eval-ac-toggle">▼</span>
+          </div>
+          <div class="eval-ac-body">
+            <div class="eval-reflexif">
+              <div class="eval-reflexif-label">// Écrit réflexif</div>
+              Dans le cadre des modules R5ROM10 et R5ROM11, j'ai appris à administrer les services multimédias en garantissant une Qualité de Service (QoS) adaptée aux besoins de l'entreprise. Sur le matériel MikroTik hAP, j'ai d'abord pratiqué la gestion des flux en environnement local, avant de passer à une échelle supérieure avec le déploiement d'un cœur de réseau MPLS. En m'appuyant sur le protocole MP-BGP et l'utilisation de VRF pour isoler les clients, j'ai configuré des politiques de marquage et de priorité pour protéger les flux sensibles. Cette approche m'a permis de garantir que la téléphonie reste fluide même lorsque la bande passante est sollicitée par la vidéo, illustrant parfaitement la nécessité de maîtriser l'infrastructure pour assurer la haute disponibilité des services multimédias.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>// PORTFOLIO</span> — Moustapha MBAYE · Technicien Réseaux & Télécoms · BUT RT · IUT Roanne · <span>2026</span>
+</footer>
+
+<script>
+// ─── CUSTOM CURSOR ───
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// ─── PARTICLE CANVAS ───
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+const COLORS = ['#00d4ff','#ff6b00','#39ff14'];
+const particles = Array.from({length: 80}, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  vx: (Math.random() - 0.5) * 0.4,
+  vy: (Math.random() - 0.5) * 0.4,
+  r: Math.random() * 1.5 + 0.5,
+  color: COLORS[Math.floor(Math.random() * COLORS.length)],
+  opacity: Math.random() * 0.6 + 0.1
+}));
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Draw connections
+  for(let i = 0; i < particles.length; i++) {
+    for(let j = i+1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < 120) {
+        ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 * (1 - dist/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  // Draw particles
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if(p.x < 0) p.x = canvas.width;
+    if(p.x > canvas.width) p.x = 0;
+    if(p.y < 0) p.y = canvas.height;
+    if(p.y > canvas.height) p.y = 0;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.opacity;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ─── SCROLL FADE IN ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 100 * (Array.from(e.target.parentNode.children).indexOf(e.target)));
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Timeline items scroll animation
+const tlObserver = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 150);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
+
+// ─── ACCORDION TOGGLES ───
+function toggleComp(header) {
+  const block = header.parentElement;
+  block.classList.toggle('open');
+}
+function toggleAC(header) {
+  const item = header.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>
